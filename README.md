@@ -62,3 +62,18 @@ To confirm my final hypothesis, I filtered Wireshark for the true C2.
 * **Victim IP:** `10.1.17.215`
 * **C2 Domain:** `ping3.dyngate.com`
 * **C2 Method:** High-frequency DNS beaconing.
+
+---
+
+### 6. 💡 Proactive Detection & Automation
+
+This hunt was manual, but in a real-world SecOps role, I would automate this detection.
+
+**1. Detection Rule Logic:**
+A detection rule could be written to alert on a high frequency of DNS queries to the same non-corporate domain.
+
+* **Logic:** `Alert when a single host makes > 100 DNS queries for the same subdomain in 10 minutes, where the parent domain is NOT in (company.com, google.com, microsoft.com, etc.)`
+* This logic could be implemented in a SIEM (like Chronicle's YARA-L or Splunk SPL) to catch this C2 beaconing behavior automatically.
+
+**2. Hunt Automation:**
+The `awk` command I used to find the "longest DNS query" can be turned into a simple `bash` script. This script could be run daily against all new Zeek logs, automatically flagging any new domains that use DNS exfiltration techniques.
